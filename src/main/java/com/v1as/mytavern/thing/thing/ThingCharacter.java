@@ -11,8 +11,10 @@ import lombok.Data;
 public class ThingCharacter implements GameCharacter {
 
     private boolean infected = false;
+    boolean trading = false;
     private Player player;
     private Map<CardType, Integer> cards = new HashMap<>();
+    private CardType lastCard;
 
     {
         Arrays.stream(CardType.values()).forEach(card -> cards.put(card, 0));

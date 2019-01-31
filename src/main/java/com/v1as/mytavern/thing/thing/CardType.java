@@ -37,4 +37,8 @@ public enum CardType {
     CardType(String shortName) {
         this.shortName = shortName;
     }
+
+    public String getShortName() {
+        return shortName;
+    }
 }

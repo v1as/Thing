@@ -7,6 +7,7 @@ import com.v1as.mytavern.thing.logic.GameState;
 import com.v1as.mytavern.thing.logic.Player;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,6 +40,7 @@ public class ThingState implements GameState {
             .put(CardType.WATCH_AROUND, 1)
             .build())
         .build();
+    private LinkedList<CardType> cards;
 
     public void initialize(List<Player> players, List<ThingCharacter> characters) {
         this.players = players;
@@ -47,11 +49,11 @@ public class ThingState implements GameState {
         shuffle(playerList);
         Iterator<Player> getPlayer = playerList.iterator();
         characters.forEach(c -> c.setPlayer(getPlayer.next()));
-        List<CardType> pool = createPool(players);
+        LinkedList<CardType> pool = createPool(players);
         shuffle(pool);
         int forPlayersAmount = players.size() * CARDS_AMOUNT - 1;
         List<CardType> forPlayers = new ArrayList<>(pool.subList(0, forPlayersAmount));
-        pool = new ArrayList<>(pool.subList(forPlayersAmount, pool.size()));
+        pool = new LinkedList<>(pool.subList(forPlayersAmount, pool.size()));
         forPlayers.add(CardType.THING);
         shuffle(forPlayers);
         Integer infectedAmount = CARDS.get(players.size()).get(CardType.INFECT);
@@ -65,10 +67,12 @@ public class ThingState implements GameState {
                 character.addCard(card);
             }
         }
+        this.cards = pool;
+
     }
 
-    private List<CardType> createPool(List<Player> players) {
-        List<CardType> pool = new ArrayList<>();
+    private LinkedList<CardType> createPool(List<Player> players) {
+        LinkedList<CardType> pool = new LinkedList<>();
         for (Entry<CardType, Integer> entry : CARDS.get(players.size()).entrySet()) {
             CardType key = entry.getKey();
             Integer number = entry.getValue();
